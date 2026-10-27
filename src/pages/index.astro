@@ -1,0 +1,406 @@
+---
+import Base from '../layouts/Base.astro';
+import * as si from 'simple-icons';
+import { M, reels, drawings, clips3d, folders, tools, countries, life, projects } from '../data/site';
+
+const chars = (w: string) => w.split('');
+const icon = (key?: string) => (key ? (si as Record<string, { path: string; hex: string }>)[key] : undefined);
+const light = (hex: string) => {
+  const n = parseInt(hex, 16);
+  return ((n >> 16) * 299 + ((n >> 8) & 255) * 587 + (n & 255) * 114) / 1000 > 160;
+};
+
+// Thread waypoints: [x%, y%] of the section, or ['selector', ax, ay] anchored to an element.
+// Each section starts where the one above ended, so the line reads as one thread.
+const T = {
+  hero: [[5, 0], ['.l1', 0.1, -0.35], ['.l1', 0.48, 0.55], ['.l1', 0.96, 1.02], ['.l2', 0.58, 0.55], ['.l2', 0.22, 1.5], [20, 100]],
+  tapes: [[20, 0], [24, 50], [20, 100]],
+  about: [[20, 0], ['.about__lines .line:nth-child(1)', 0.3, 0.5], ['.about__lines .q', 0.45, 0.55], ['.about__lines .line:nth-child(4)', 0.3, 0.5], ['.about__say', 0.92, 0.1], ['.group--1 .polaroid', 0.5, -0.04], ['.group--2 .polaroid', 0.5, -0.04], ['.group--3 .polaroid', 0.4, -0.04], [30, 100]],
+  work: [[30, 0], ['.work-intro .mega', 0.55, 0.28], ['.work-intro .mega', 0.18, 0.86], [30, 100]],
+  ch: [[30, 0], ['.chapter__top', 0.03, 1.8], ['.chapter__name .mega', 0.5, 0.45], ['.chapter__cta', -0.04, 0.5], [30, 100]],
+};
+const pts = (p: unknown) => JSON.stringify(p);
+
+const reelSrc = (id: string) => `${M}/reels/${id}.mp4`;
+const wallCols = [0, 1, 2, 3, 4, 5].map((c) => [0, 1, 2, 3].map((r) => reels[(c * 4 + r * 5) % reels.length]));
+
+// drawings land around the title (x%, y% of the viewport from the centre, rotation)
+const sheetSpots = [
+  [-36, -30, -8], [-14, -36, 5], [14, -34, -4], [36, -28, 7], [-42, 4, 6], [42, 2, -6], [-30, 34, -5],
+  [-8, 38, 4], [16, 36, -7], [34, 32, 5], [-20, -4, -3], [22, 4, 8], [0, -2, -2],
+];
+// flags: five on each side of the big 10, all inside the screen
+const flagSpots = [
+  [-40, -28, -8], [40, -28, 7], [-26, -10, 5], [27, -9, -6], [-41, 8, 6], [42, 9, -5], [-27, 26, -4], [28, 27, 8], [-40, 38, 3], [40, 38, -7],
+];
+const folderSheets = folders.map((f) => {
+  const k = Math.ceil(f.items.length / 2);
+  return { ...f, halves: 'sheets' in f && f.sheets ? f.sheets : [f.items.slice(0, k), f.items.slice(k)] };
+});
+// collage: each photo goes to the shortest column, so the columns end level
+const lifeCols: (typeof life)[] = [[], [], [], []];
+const colH = [0, 0, 0, 0];
+life.forEach((p) => {
+  const c = colH.indexOf(Math.min(...colH));
+  lifeCols[c].push(p);
+  colH[c] += 1 / p.r + 0.12;
+});
+
+// the Go Car invoice workflow, one or two words per step
+const flow = [
+  { n: '01', t: 'Email in' },
+  { n: '02', t: 'Request read' },
+  { n: '03', t: 'Notion record', icon: 'siNotion' },
+  { branch: [{ n: '4A', t: '8sens' }, { n: '4B', t: 'Zoho', icon: 'siZoho' }] },
+  { n: '05', t: 'Invoice made' },
+  { n: '06', t: 'PDF saved' },
+  { n: '07', t: 'Notion updated', icon: 'siNotion' },
+  { n: '08', t: 'CEO approves' },
+  { n: '09', t: 'Invoice sent' },
+];
+const [goCar, leanLog, salesWeek] = projects;
+---
+<Base
+  title="Aaditya Gambhir · Marketing, Sales & AI"
+  description="Aaditya Gambhir works across marketing, sales and AI, with two bachelor's degrees: one in business, one in data. Portfolio, projects and contact."
+>
+  <div class="sig" aria-hidden="true">
+    <video src={`${M}/intro/signature.mp4`} muted playsinline preload="auto"></video>
+  </div>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero paper" id="top">
+      <svg class="thread" data-points={pts(T.hero)} aria-hidden="true"></svg>
+      <h1 class="hero__name" aria-label="Aaditya Gambhir">
+        <span class="mega line l1">{chars('AADITYA').map((c) => <span class="ch">{c}</span>)}</span>
+        <span class="mega line l2" data-thread-front>{chars('GAMBHIR').map((c) => <span class="ch">{c}</span>)}</span>
+      </h1>
+      <div class="hero__me">
+        <img src={`${M}/hero/hero-full.webp`} alt="Aaditya Gambhir" width="1086" height="1448" fetchpriority="high" />
+      </div>
+      <div class="hero__tag"><i></i><i></i><i></i><i></i>Marketing · Sales · AI</div>
+      <div class="hero__fade"></div>
+      <div class="hero__foot">
+        <p>Two bachelor's degrees, one in business and one in data. I bring both to marketing, sales and AI.</p>
+        <a href="#work" class="link-arrow">See my work <span aria-hidden="true">↘</span></a>
+        <span class="status">Open to internships from January 2027</span>
+      </div>
+    </section>
+
+    <!-- CROSSING TAPES -->
+    <section class="tapes" aria-hidden="true">
+      <svg class="thread" data-points={pts(T.tapes)}></svg>
+      <div class="tape tape--green"><div class="tape__track" data-dir="1">
+        {[0, 1, 2, 3].map(() => ['Content', 'Strategy', 'Data', 'Video', 'Design'].map((w) => <><span>{w}</span><b>+++</b></>))}
+      </div></div>
+      <div class="tape tape--red"><div class="tape__track" data-dir="-1">
+        {[0, 1, 2, 3].map(() => ['Marketing', 'Sales', 'AI & Automation', '3D', 'Storytelling'].map((w) => <><span>{w}</span><b>+++</b></>))}
+      </div></div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="about paper" id="about">
+      <svg class="thread" data-points={pts(T.about)} aria-hidden="true"></svg>
+      <h2 class="about__lines" aria-label="I listen, ask good questions and build the foundation first.">
+        <span class="mega line">I listen,</span>
+        <span class="mega line indent-1">ask good <span class="q" data-thread-front>questions</span></span>
+        <span class="mega line">and build the</span>
+        <span class="mega line indent-2"><span class="red">foundation</span> first.</span>
+      </h2>
+      <div class="about__body">
+        <p class="about__say">Whatever problem you give me, it will be <span class="red">solved.</span> The variable is only the <span class="red">time.</span></p>
+        <div class="about__groups">
+          <div class="group group--1">
+            <figure class="polaroid"><img src={`${M}/photos/about-suit.webp`} alt="Aaditya in Austria" loading="lazy" /><figcaption>Austria</figcaption></figure>
+            <div class="tags">
+              <div class="degree"><b>Business Consultancy International</b><span>Bachelor, Marketing · FH Wiener Neustadt</span></div>
+              <div class="degree"><b>Computer Applications</b><span>Bachelor, Data Analysis · Amity Online University</span></div>
+            </div>
+          </div>
+          <div class="group group--2">
+            <figure class="polaroid"><img src={`${M}/photos/finland.webp`} alt="Aaditya in Helsinki" loading="lazy" /><figcaption>Helsinki</figcaption></figure>
+            <div class="tags">
+              <div class="degree degree--green"><b>International Sales Week</b><span>2nd place in the final · Haaga-Helia, May 2026</span></div>
+            </div>
+          </div>
+          <div class="group group--3">
+            <figure class="polaroid"><img src={`${M}/photos/spain-castle.webp`} alt="Aaditya in Spain" loading="lazy" /><figcaption>Spain</figcaption></figure>
+            <div class="tags">
+              <div class="degree degree--red"><b>Go Car Barcelona</b><span>Sales & Marketing Operations Intern · Jun - Aug 2026</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHAT I DO: horizontal -->
+    <section class="do" aria-label="What I do">
+      <div class="do__track">
+        <div class="panel panel--intro paper">
+          <h2 class="mega">What<br />I <span class="red">do</span> →</h2>
+        </div>
+
+        <div class="panel">
+          <div class="mzone mzone--content">
+            <img class="phone" src={`${M}/work/gocar-tiktok.webp`} alt="The Go Car TikTok feed I ran" loading="lazy" />
+            <video muted loop playsinline preload="none" data-src={reelSrc('d1-kinetic')} poster={`${M}/reels/d1-kinetic.jpg`}></video>
+            <video muted loop playsinline preload="none" data-src={reelSrc('d7-lost-10kg')} poster={`${M}/reels/d7-lost-10kg.jpg`}></video>
+          </div>
+          <div class="panel__stat">
+            <b>134K+</b>
+            <span class="mono">Organic views: 118K+ for Go Car, 16K+ for my own brand</span>
+          </div>
+          <div class="panel__title"><h3 class="mega">Marketing<br />&amp; content</h3></div>
+        </div>
+
+        <div class="panel panel--green">
+          <div class="mzone mzone--photos">
+            <img src={`${M}/work/gocar/photo-5.webp`} alt="Customers in a Go Car" loading="lazy" />
+            <img src={`${M}/work/gocar/photo-6.webp`} alt="Go Car customers in Barcelona" loading="lazy" />
+            <img src={`${M}/work/gocar/photo-4.webp`} alt="Go Car tour" loading="lazy" />
+          </div>
+          <div class="panel__stat">
+            <b>20+</b>
+            <span class="mono">New bookings I sold and closed at Go Car</span>
+            <b class="small">80+</b>
+            <span class="mono">Hotels reached for a referral channel</span>
+          </div>
+          <div class="panel__title"><h3 class="mega">Sales &amp;<br />clients</h3></div>
+        </div>
+
+        <div class="panel paper">
+          <div class="flow" aria-label="Invoice workflow I automated with the Go Car CEO">
+            {flow.map((f, i) => (
+              <>
+                {i > 0 && <span class="fline"></span>}
+                {'branch' in f && f.branch ? (
+                  <div class="fbranch">
+                    {f.branch.map((b) => {
+                      const ic = icon(b.icon);
+                      return <div class="fnode"><em>{b.n}</em>{ic && <svg viewBox="0 0 24 24" aria-hidden="true"><path d={ic.path} /></svg>}<b>{b.t}</b></div>;
+                    })}
+                  </div>
+                ) : (
+                  <div class="fnode">
+                    <em>{f.n}</em>
+                    {icon(f.icon) && <svg viewBox="0 0 24 24" aria-hidden="true"><path d={icon(f.icon)!.path} /></svg>}
+                    <b>{f.t}</b>
+                  </div>
+                )}
+              </>
+            ))}
+          </div>
+          <div class="panel__stat">
+            <b>-20%</b>
+            <span class="mono">Weekly admin for the Go Car CEO after we automated his invoicing</span>
+          </div>
+          <div class="panel__title"><h3 class="mega">AI &amp;<br />automation</h3></div>
+        </div>
+
+        <div class="panel">
+          <div class="mzone mzone--design">
+            <img src={`${M}/work/leanlog/day7-minus-10kg.webp`} alt="Thumbnail I designed: minus 10 kg" loading="lazy" />
+            <img src={`${M}/art/old-man.webp`} alt="Pencil drawing of an old man" loading="lazy" />
+            <img src={`${M}/work/leanlog/day6-4-50-am.webp`} alt="Thumbnail I designed: 4.50 AM" loading="lazy" />
+            <img src={`${M}/art/eye.webp`} alt="Colour drawing of an eye" loading="lazy" />
+          </div>
+          <div class="panel__stat">
+            <b>13</b>
+            <span class="mono">Drawings, plus product animation in Blender, thumbnails and edits</span>
+          </div>
+          <div class="panel__title"><h3 class="mega">Design,<br />3D &amp; video</h3></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- REEL WALL -->
+    <section class="wall" aria-label="Reels I edited">
+      <div class="wall__grid">
+        {wallCols.map((col) => (
+          <div class="wall__col">
+            {col.map((id) => <video muted loop playsinline preload="none" data-src={reelSrc(id)} poster={`${M}/reels/${id}.jpg`} data-reel={id}></video>)}
+          </div>
+        ))}
+      </div>
+      <div class="wall__shade"></div>
+      <div class="wall__title">
+        <h2 class="mega">In<br />motion</h2>
+        <p class="mono">Filmed, edited and captioned by me for The Lean Log</p>
+      </div>
+    </section>
+
+    <!-- 3D -->
+    <section class="three" aria-label="3D work in Blender">
+      {clips3d.map((c) => (
+        <div class="three__clip" data-label={c.label}>
+          <video muted loop playsinline preload="none" data-src={`${M}/3d/clips/${c.id}.mp4`} poster={`${M}/3d/clips/${c.id}.jpg`}></video>
+        </div>
+      ))}
+      <div class="three__shade"></div>
+      <div class="three__text">
+        <span class="mono three__label">{clips3d[0].label}</span>
+        <h2 class="mega">Made in<br /><span class="red">Blender</span></h2>
+      </div>
+      <span class="mono three__count">01 / 0{clips3d.length}</span>
+      <div class="three__bar"><i></i></div>
+    </section>
+
+    <!-- DRAWINGS -->
+    <section class="hand-sec paper" aria-label="Drawings">
+      <div class="hand-sec__title"><h2 class="mega">Made<br />by <span class="red">hand</span></h2></div>
+      {drawings.map((d, i) => (
+        <button class:list={['sheet', i % 3 === 0 && 'front']} data-x={sheetSpots[i][0]} data-y={sheetSpots[i][1]} data-r={sheetSpots[i][2]} data-full={`${M}/art/${d.id}.webp`} aria-label={`Open drawing: ${d.title}`}>
+          <img src={`${M}/art/${d.id}.webp`} alt={`Drawing: ${d.title}`} loading="lazy" />
+        </button>
+      ))}
+    </section>
+
+    <!-- SKILLS + TOOLS -->
+    <section class="skills paper">
+      <div class="skills__head"><h2 class="mega">What's in<br />my <span class="red">folders</span></h2></div>
+      <div class="folders">
+        {folderSheets.map((f) => (
+          <div class={`folder folder--${f.color}`} tabindex="0">
+            <div class="folder__back"></div>
+            <div class="folder__papers">
+              {f.halves.map((half) => <div class="paper-sheet"><ul>{half.map((item) => <li>{item}</li>)}</ul></div>)}
+            </div>
+            <div class="folder__front"><b>{f.name}</b><span>{f.items.length} files</span></div>
+          </div>
+        ))}
+      </div>
+      <div class="tools-head"><h3 class="mega">The <span class="green">toolkit</span></h3></div>
+      <div class="pit">
+        {tools.map((t) => {
+          const ic = icon(t.icon);
+          const hex = ic ? (ic.hex === '000000' ? '1d1d1d' : ic.hex) : t.hex!;
+          const txt = light(hex) ? '#111' : '#fff';
+          return (
+            <div class="tile" style={`--c:#${hex};--t:${txt}`}>
+              {ic ? <svg viewBox="0 0 24 24" aria-hidden="true"><path d={ic.path} /></svg> : <span class="mark">{t.mark}</span>}
+              <em>{t.name}</em>
+            </div>
+          );
+        })}
+      </div>
+    </section>
+
+    <!-- SELECTED WORK -->
+    <section class="work-intro" id="work">
+      <svg class="thread" data-points={pts(T.work)} aria-hidden="true"></svg>
+      <h2 class="mega">Selected<br /><span class="red">work</span></h2>
+    </section>
+
+    <article class="chapter">
+      <svg class="thread" data-points={pts(T.ch)} aria-hidden="true"></svg>
+      <div class="chapter__top"><span class="mono">{goCar.n} / {goCar.short}</span><p>{goCar.line}</p></div>
+      <div class="float float--back" data-speed="0.25" style="width:44vw;aspect-ratio:16/9;right:6vw;top:16vh">
+        <video muted loop playsinline preload="none" data-src={`${M}/work/gocar/promo-loop.mp4`} poster={`${M}/work/gocar/promo-poster.jpg`}></video>
+      </div>
+      <div class="float" data-speed="-0.35" style="width:20vw;aspect-ratio:4/5;left:6vw;top:20vh;transform:rotate(-4deg)"><img src={`${M}/work/gocar/photo-2.webp`} alt="Go Car tour in Barcelona" loading="lazy" /></div>
+      <div class="float" data-speed="-0.5" style="width:20vw;aspect-ratio:16/10;right:4vw;top:82vh;transform:rotate(3deg)"><img src={`${M}/work/gocar/photo-1.webp`} alt="Go Car cars on a Barcelona street" loading="lazy" /></div>
+      <div class="chapter__name chapter__name--low" style="--len:6"><h3 class="mega">Go Car<span class="dot" style="left:62%;top:-4%"></span></h3></div>
+      <div class="sticker" style="left:30vw;top:26vh">118,000+<small>organic views</small></div>
+      <div class="sticker sticker--green" style="left:56vw;top:58vh">20+<small>bookings closed</small></div>
+      <a class="link-arrow chapter__cta" href={`/work/${goCar.slug}/`}>Explore project ↗</a>
+    </article>
+
+    <article class="chapter chapter--green">
+      <svg class="thread" data-points={pts(T.ch)} aria-hidden="true"></svg>
+      <div class="chapter__top"><span class="mono">{leanLog.n} / {leanLog.short}</span><p>{leanLog.line}</p></div>
+      <div class="float float--back" data-speed="-0.3" style="width:30vw;aspect-ratio:16/9;left:5vw;top:15vh;transform:rotate(-3deg)"><img src={`${M}/work/leanlog/day7-minus-10kg.webp`} alt="Lean Log thumbnail: minus 10 kg in 4 months" loading="lazy" /></div>
+      <div class="float float--back" data-speed="0.2" style="width:28vw;aspect-ratio:16/9;right:6vw;top:18vh;transform:rotate(2deg)"><img src={`${M}/work/leanlog/day6-4-50-am.webp`} alt="Lean Log thumbnail: I wake up at 4.50 AM" loading="lazy" /></div>
+      <div class="float float--back" data-speed="-0.45" style="width:26vw;aspect-ratio:16/9;left:9vw;top:76vh;transform:rotate(2deg)"><img src={`${M}/work/leanlog/day5-healthy.webp`} alt="Lean Log thumbnail: it does not have to be healthy" loading="lazy" /></div>
+      <div class="float float--back" data-speed="-0.25" style="width:25vw;aspect-ratio:16/9;right:12vw;top:72vh;transform:rotate(-3deg)"><img src={`${M}/work/leanlog/day4-leg-day.webp`} alt="Lean Log thumbnail: leg day" loading="lazy" /></div>
+      <div class="chapter__name" style="--len:8"><h3 class="mega">Lean Log<span class="dot" style="left:44%;top:-4%"></span></h3></div>
+      <div class="sticker" style="left:40vw;top:20vh">16,000+<small>views in four weeks</small></div>
+      <a class="link-arrow chapter__cta" href={`/work/${leanLog.slug}/`}>Explore project ↗</a>
+    </article>
+
+    <article class="chapter">
+      <svg class="thread" data-points={pts(T.ch)} aria-hidden="true"></svg>
+      <div class="chapter__top"><span class="mono">{salesWeek.n} / {salesWeek.short}</span><p>{salesWeek.line}</p></div>
+      <div class="float" data-speed="-0.35" style="width:30vw;aspect-ratio:4/5;right:7vw;top:16vh;transform:rotate(3deg)"><img src={`${M}/photos/finland-salesweek.webp`} alt="The team at International Sales Week" loading="lazy" /></div>
+      <div class="float float--back" data-speed="0.25" style="width:32vw;aspect-ratio:16/9;left:6vw;top:22vh;transform:rotate(-2deg)"><img src={`${M}/photos/finland-team.webp`} alt="With the team in Helsinki" loading="lazy" /></div>
+      <div class="float" data-speed="-0.6" style="width:18vw;aspect-ratio:4/3;left:30vw;top:80vh;transform:rotate(-4deg)"><img src={`${M}/photos/finland-cathedral.webp`} alt="Helsinki" loading="lazy" /></div>
+      <div class="chapter__name" style="--len:10"><h3 class="mega">Sales week<span class="dot" style="left:30%;top:-4%"></span></h3></div>
+      <div class="sticker sticker--ivory" style="left:44vw;top:28vh">2nd place<small>in the final</small></div>
+      <a class="link-arrow chapter__cta" href={`/work/${salesWeek.slug}/`}>Explore project ↗</a>
+    </article>
+
+    <!-- COUNTRIES -->
+    <section class="places paper" aria-label="Ten countries">
+      <div class="places__big"><span class="num">10</span><h2 class="mega">Countries</h2></div>
+      {countries.map((c, i) => (
+        <div class="flag" data-x={flagSpots[i][0]} data-y={flagSpots[i][1]} data-r={flagSpots[i][2]}>
+          <img src={`${M}/flags/${c.code}.svg`} alt="" />
+          <span>{c.name}</span>
+        </div>
+      ))}
+    </section>
+
+    <!-- LIFE COLLAGE -->
+    <section class="life">
+      <div class="life__head"><h2 class="mega">Off the<br /><span class="red">clock</span></h2></div>
+      <div class="life__cols">
+        {lifeCols.map((col, ci) => (
+          <div class="life__col" data-speed={[-0.04, 0.03, -0.06, 0.02][ci]}>
+            {col.map((s) => (
+              <figure class="snap">
+                <img src={`${M}/photos/${s.img}.webp`} alt={s.cap || 'Aaditya'} loading="lazy" style={`aspect-ratio:${s.r}`} />
+                {s.cap && <figcaption>{s.cap}</figcaption>}
+              </figure>
+            ))}
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- CTA + footer, one screen -->
+    <section class="cta paper" id="contact">
+      <div class="cta__main">
+        <div>
+          <h2 class="mega">
+            <span class="line">Got a</span>
+            <span class="line indent-1">problem</span>
+            <span class="line">worth</span>
+            <span class="line indent-1 red">solving?</span>
+          </h2>
+          <div class="cta__links">
+            <a class="link-arrow cta__talk" href="mailto:adityagambhir38@gmail.com">Let's talk ↗</a>
+            <a class="link-arrow" href="https://www.linkedin.com/in/aaditya-gambhir/" target="_blank" rel="noopener">LinkedIn ↗</a>
+          </div>
+        </div>
+        <div class="knot">
+          <svg aria-hidden="true"><path></path><circle r="7"></circle></svg>
+          <button class="knot__handle" aria-label="Pull to untangle and email Aaditya"></button>
+          <span class="mono knot__hint">Pull to untangle</span>
+        </div>
+      </div>
+      <div class="cta__foot">
+        <div class="footer__row">
+          <span class="mono">Wiener Neustadt, Austria</span>
+          <nav class="mono" aria-label="Footer">
+            <a href="https://www.linkedin.com/in/aaditya-gambhir/" target="_blank" rel="noopener">LinkedIn</a>
+            <a href="https://www.instagram.com/aadityagambhir_/" target="_blank" rel="noopener">Instagram</a>
+            <a href="https://www.youtube.com/@aadityagambhir_01" target="_blank" rel="noopener">YouTube</a>
+            <a href="/cv/">CV</a>
+          </nav>
+        </div>
+        <div class="footer__mark">Aaditya <span>G.</span></div>
+        <div class="footer__row"><span class="mono">© 2026</span><a href="#top" class="mono">Back to top ↑</a></div>
+      </div>
+    </section>
+  </main>
+
+  <div class="lightbox" role="dialog" aria-modal="true" aria-label="Viewer">
+    <button class="lightbox__close">Close</button>
+    <img alt="" hidden />
+    <video controls playsinline hidden></video>
+  </div>
+
+  <script>
+    import '../scripts/home.ts';
+  </script>
+</Base>

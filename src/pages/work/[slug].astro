@@ -1,0 +1,128 @@
+---
+import Base from '../../layouts/Base.astro';
+import { M, projects } from '../../data/site';
+
+export function getStaticPaths() {
+  return projects.map((p, i) => ({ params: { slug: p.slug }, props: { i } }));
+}
+const { i } = Astro.props;
+const p = projects[i];
+const next = projects[(i + 1) % projects.length];
+
+type Media = { kind: 'img' | 'video'; src: string; poster?: string; alt: string; size: string; ratio?: string };
+const gallery: Record<string, Media[]> = {
+  'go-car': [
+    { kind: 'img', src: `${M}/work/gocar/photo-1.webp`, alt: 'Go Car cars on a Barcelona street', size: 'g-wide', ratio: '16/10' },
+    { kind: 'img', src: `${M}/work/gocar/photo-2.webp`, alt: 'Go Car tour in Barcelona', size: 'g-narrow', ratio: '4/5' },
+    { kind: 'img', src: `${M}/work/gocar/photo-3.webp`, alt: 'Go Car in the city', size: 'g-half', ratio: '16/10' },
+    { kind: 'img', src: `${M}/work/gocar/photo-5.webp`, alt: 'Customers in a Go Car', size: 'g-half', ratio: '16/10' },
+    { kind: 'img', src: `${M}/work/gocar-instagram.webp`, alt: 'The Go Car Instagram feed during the internship', size: 'g-half', ratio: '1/1' },
+    { kind: 'img', src: `${M}/work/gocar-tiktok.webp`, alt: 'The Go Car TikTok feed during the internship', size: 'g-half', ratio: '1/1' },
+  ],
+  'lean-log': [
+    { kind: 'img', src: `${M}/work/leanlog/day7-minus-10kg.webp`, alt: 'Thumbnail: minus 10 kg', size: 'g-half', ratio: '16/9' },
+    { kind: 'img', src: `${M}/work/leanlog/day6-4-50-am.webp`, alt: 'Thumbnail: 4.50 AM', size: 'g-half', ratio: '16/9' },
+    { kind: 'video', src: `${M}/reels/d7-lost-10kg.mp4`, poster: `${M}/reels/d7-lost-10kg.jpg`, alt: 'Reel: I lost 10 kg in 4 months', size: 'g-third', ratio: '9/16' },
+    { kind: 'video', src: `${M}/reels/d1-kinetic.mp4`, poster: `${M}/reels/d1-kinetic.jpg`, alt: 'Reel with kinetic captions', size: 'g-third', ratio: '9/16' },
+    { kind: 'video', src: `${M}/reels/d3-gym-split.mp4`, poster: `${M}/reels/d3-gym-split.jpg`, alt: 'Reel: which gym split should you do', size: 'g-third', ratio: '9/16' },
+    { kind: 'img', src: `${M}/work/leanlog/day5-7700.webp`, alt: 'Thumbnail: 7,700 calories', size: 'g-third', ratio: '16/9' },
+    { kind: 'img', src: `${M}/work/leanlog/day3-chest-day.webp`, alt: 'Thumbnail: chest day', size: 'g-third', ratio: '16/9' },
+    { kind: 'img', src: `${M}/work/leanlog/day8-day-one.webp`, alt: 'Thumbnail: day one', size: 'g-third', ratio: '16/9' },
+  ],
+  'sales-week': [
+    { kind: 'img', src: `${M}/photos/finland-team.webp`, alt: 'With the team in Helsinki', size: 'g-wide', ratio: '16/10' },
+    { kind: 'img', src: `${M}/photos/finland.webp`, alt: 'Helsinki', size: 'g-narrow', ratio: '4/5' },
+    { kind: 'img', src: `${M}/photos/finland-cathedral.webp`, alt: 'Helsinki Cathedral', size: 'g-full', ratio: '21/9' },
+  ],
+  eubos: [],
+};
+const hero: Record<string, Media> = {
+  'go-car': { kind: 'video', src: `${M}/work/gocar/promo-full.mp4`, poster: `${M}/work/gocar/promo-poster.jpg`, alt: 'Shop-screen promo for Go Car', size: '' },
+  'lean-log': { kind: 'img', src: `${M}/work/leanlog/day7-cut-over.webp`, alt: 'Lean Log thumbnail: cut over', size: '' },
+  'sales-week': { kind: 'img', src: `${M}/photos/finland-salesweek.webp`, alt: 'The team at International Sales Week', size: '' },
+};
+const h = hero[p.slug];
+
+let seed = 3;
+const rnd = () => ((seed = (seed * 9301 + 49297) % 233280) / 233280);
+let price = 55;
+const candles = Array.from({ length: 70 }, (_, k) => {
+  const o = price;
+  price = Math.max(12, Math.min(98, price + (rnd() - 0.48) * 11));
+  return { x: 4 + k * 10, o, c: price, h: Math.max(o, price) + rnd() * 6, l: Math.min(o, price) - rnd() * 6 };
+});
+---
+<Base title={`${p.short} · Aaditya Gambhir`} description={p.line}>
+  <main class="case">
+    <section class="case-hero paper">
+      <div class="case-hero__top"><span class="mono">{p.n} / {p.short}</span><p>{p.line}</p></div>
+      <h1 class="mega case-title">{p.name}<span class="red">.</span></h1>
+      <dl class="facts mono">
+        <div><dt>Role</dt><dd>{p.role}</dd></div>
+        <div><dt>When</dt><dd>{p.when}</dd></div>
+        <div><dt>Where</dt><dd>{p.where}</dd></div>
+        <div><dt>Result</dt><dd>{p.result}</dd></div>
+      </dl>
+    </section>
+
+    <section class="case-media">
+      {h && h.kind === 'video' && <video class="reveal" controls muted loop playsinline preload="metadata" poster={h.poster} src={h.src} aria-label={h.alt}></video>}
+      {h && h.kind === 'img' && <img class="reveal" src={h.src} alt={h.alt} />}
+      {p.slug === 'eubos' && (
+        <div class="candles reveal" style="position:relative;aspect-ratio:21/8">
+          <svg viewBox="0 0 704 110" preserveAspectRatio="none" aria-hidden="true">
+            {candles.map((c) => (
+              <g stroke={c.c >= c.o ? '#22a55b' : '#d7261e'} fill={c.c >= c.o ? '#22a55b' : '#d7261e'} stroke-width="1">
+                <line x1={c.x + 3} x2={c.x + 3} y1={110 - c.h} y2={110 - c.l} />
+                <rect x={c.x} width="6" y={110 - Math.max(c.o, c.c)} height={Math.max(1.5, Math.abs(c.o - c.c))} />
+              </g>
+            ))}
+          </svg>
+        </div>
+      )}
+    </section>
+
+    <section class="case-stats">
+      {p.stats.map((s) => <div class="reveal"><b>{s.n}</b><span class="mono">{s.label}</span></div>)}
+    </section>
+
+    <section class="case-story">
+      {p.story.map((s) => (
+        <article class="reveal">
+          <h2>{s.h}</h2>
+          <p>{s.p}</p>
+        </article>
+      ))}
+    </section>
+
+    {gallery[p.slug].length > 0 && (
+      <section class="case-gallery">
+        {gallery[p.slug].map((g) => (
+          <figure class:list={[g.size, 'reveal']} style={g.ratio ? `aspect-ratio:${g.ratio}` : ''}>
+            {g.kind === 'img'
+              ? <img src={g.src} alt={g.alt} loading="lazy" />
+              : <video muted loop playsinline preload="none" data-src={g.src} poster={g.poster} aria-label={g.alt}></video>}
+          </figure>
+        ))}
+      </section>
+    )}
+
+    <a class="next" href={`/work/${next.slug}/`}>
+      <span class="mono">Next project</span>
+      <span class="mega" style="display:block;margin-top:2vh">{next.name} →</span>
+    </a>
+  </main>
+  <footer class="footer">
+    <div class="footer__row">
+      <a href="/" class="mono">← All work</a>
+      <nav class="mono" aria-label="Footer">
+        <a href="https://www.linkedin.com/in/aaditya-gambhir/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="mailto:adityagambhir38@gmail.com">Let's talk</a>
+        <a href="/cv/">CV</a>
+      </nav>
+    </div>
+  </footer>
+  <script>
+    import '../../scripts/case.ts';
+  </script>
+</Base>

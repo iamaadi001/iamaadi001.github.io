@@ -1,0 +1,104 @@
+---
+import Base from '../layouts/Base.astro';
+
+const certs = [
+  ['IBM', 'AI Product Manager (in progress)'],
+  ['Anthropic', 'AI Fluency: Framework & Foundations'],
+  ['Salesforce', 'Sales and CRM Overview'],
+  ['Meta', 'Social Media Management'],
+  ['Microsoft', 'Generative AI for Data Analytics'],
+  ['UPenn', 'AI for Business'],
+  ['AI Business School', 'AI for Marketing'],
+  ['HubSpot Academy', 'Social Media Marketing'],
+  ['PwC', 'Problem Solving with Excel'],
+  ['IIM Bangalore', 'Marketing Management'],
+  ['ÖSD', 'German B2'],
+];
+---
+<Base title="CV · Aaditya Gambhir" description="Education, experience, projects and certifications of Aaditya Gambhir.">
+  <main class="cv paper">
+    <h1 class="mega cv-title">Curriculum<br /><span class="red">vitae</span></h1>
+
+    <section>
+      <h2>Education</h2>
+      <div>
+        <div class="cv-item">
+          <h3>Bachelor, Business Consultancy International</h3>
+          <span class="mono">Marketing · FH Wiener Neustadt, Austria · 2024 - 2027</span>
+          <ul><li>Includes a mandatory internship semester, January to May 2027.</li></ul>
+        </div>
+        <div class="cv-item">
+          <h3>Bachelor, Computer Applications</h3>
+          <span class="mono">Data Analysis · Amity Online University, India · 2022 - 2026</span>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Experience</h2>
+      <div>
+        <div class="cv-item">
+          <h3>Sales & Marketing Operations Intern, Go Car Barcelona</h3>
+          <span class="mono">Barcelona, Spain · Jun - Aug 2026</span>
+          <ul>
+            <li>Planned and scheduled a 60-day content calendar on my own initiative: 118,000+ organic views across Instagram and TikTok.</li>
+            <li>Sold and closed 20+ new bookings with a strategy tailored to each client; handled follow-ups for 50+ reservations.</li>
+            <li>Automated 3 recurring workflows with the CEO using AI tools, cutting his weekly admin time by 20%.</li>
+            <li>Built a hotel partnership channel from scratch, reaching 80+ hotels for referral bookings.</li>
+          </ul>
+        </div>
+        <div class="cv-item">
+          <h3>Administrative Assistant, ÖH FHWN (Austrian Student Union)</h3>
+          <span class="mono">Wiener Neustadt, Austria · Since Apr 2026</span>
+          <ul>
+            <li>Plan and run university events on site, coordinating logistics across departments.</li>
+            <li>Manage partner communication with consistent follow-up and clear documentation.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Projects</h2>
+      <div>
+        <div class="cv-item">
+          <h3>International Sales Week, Haaga-Helia</h3>
+          <span class="mono">Helsinki, Finland · May 2026 · Erasmus+</span>
+          <ul><li>Represented FHWN; 2nd place in the final with a multicultural team.</li></ul>
+        </div>
+        <div class="cv-item">
+          <h3>Henkel: Colour Catcher growth strategy for Italy</h3>
+          <span class="mono">FHWN course project with Henkel · Sep - Dec 2026</span>
+        </div>
+        <div class="cv-item">
+          <h3>The Lean Log</h3>
+          <span class="mono">My fitness brand · Since Oct 2026</span>
+          <ul><li>16,000+ views on YouTube and Instagram in the first four weeks.</li></ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Certifi&shy;cations</h2>
+      <div class="certs">
+        {certs.map(([b, s]) => <div class="cert"><b>{b}</b><span>{s}</span></div>)}
+      </div>
+    </section>
+
+    <section>
+      <h2>Languages</h2>
+      <div class="cv-item">
+        <h3>English C1 · German B2 · Hindi native</h3>
+      </div>
+    </section>
+  </main>
+  <footer class="footer">
+    <div class="footer__row">
+      <a href="/" class="mono">← Home</a>
+      <a href="mailto:adityagambhir38@gmail.com" class="mono">Let's talk</a>
+    </div>
+  </footer>
+  <script>
+    import '../scripts/case.ts';
+  </script>
+</Base>
