@@ -308,26 +308,31 @@ if (reduce) {
   document.documentElement.classList.add('is-signing');
   lenis?.stop();
 
+  // the signature is an animated image: images always animate, videos can be blocked on phones
   const sig = $('.sig');
-  const video = $<HTMLVideoElement>('video', sig);
   let done = false;
   const endIntro = () => {
     if (done) return;
     done = true;
     sig.classList.add('is-done');
-    gsap.to(sig, { opacity: 0, duration: 0.8, delay: 0.35, ease: 'power2.inOut', onComplete: () => {
+    gsap.to(sig, { opacity: 0, duration: 0.8, delay: 0.2, ease: 'power2.inOut', onComplete: () => {
       sig.remove();
       document.documentElement.classList.remove('is-signing');
       lenis?.start();
       ScrollTrigger.refresh();
     } });
-    gsap.delayedCall(0.55, heroIn);
+    gsap.delayedCall(0.4, heroIn);
   };
-  video.addEventListener('ended', endIntro);
-  video.muted = true;
-  video.playsInline = true;
-  video.play().catch(() => setTimeout(endIntro, 400));
-  setTimeout(endIntro, 6000);
+  const img = new Image();
+  img.alt = '';
+  img.onload = () => {
+    // add it only once it is loaded, so the animation starts from the first stroke
+    sig.append(img);
+    setTimeout(endIntro, 4300);
+  };
+  img.onerror = endIntro;
+  img.src = sig.dataset.src!;
+  setTimeout(() => { if (!img.complete) endIntro(); }, 3000);
 
   const mm = gsap.matchMedia();
   mm.add({ desk: '(min-width: 768px)', mob: '(max-width: 767px)' }, (c) => build(Boolean(c.conditions!.desk)));

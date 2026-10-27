@@ -4,6 +4,7 @@ import '@fontsource/ibm-plex-mono/400.css';
 import '@fontsource/ibm-plex-mono/500.css';
 import '@fontsource/caveat/600.css';
 import '../styles/global.css';
+import { BUILD } from '../data/build';
 
 interface Props {
   title: string;
@@ -22,6 +23,19 @@ const { title, description } = Astro.props;
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script is:inline define:vars={{ BUILD }}>
+      // GitHub Pages lets phones keep an old copy for a while; if this copy is out of date,
+      // load the newest one once (a new query string skips every cache)
+      fetch('/version.json?t=' + Date.now(), { cache: 'no-store' })
+        .then((r) => r.json())
+        .then(({ v }) => {
+          if (v === BUILD) return;
+          let tried = false;
+          try { tried = sessionStorage.getItem('ag-v') === v; sessionStorage.setItem('ag-v', v); } catch (e) {}
+          if (!tried) location.replace(location.pathname + '?v=' + v + location.hash);
+        })
+        .catch(() => {});
+    </script>
   </head>
   <body>
     <div class="grain" aria-hidden="true"></div>

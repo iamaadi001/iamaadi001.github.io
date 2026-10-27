@@ -64,9 +64,8 @@ const [goCar, leanLog, salesWeek] = projects;
   title="Aaditya Gambhir · Marketing, Sales & AI"
   description="Aaditya Gambhir works across marketing, sales and AI, with two bachelor's degrees: one in business, one in data. Portfolio, projects and contact."
 >
-  <div class="sig" aria-hidden="true">
-    <video src={`${M}/intro/signature.mp4`} muted playsinline preload="auto"></video>
-  </div>
+  <div class="sig" aria-hidden="true" data-src={`${M}/intro/signature.webp`}></div>
+  <link rel="preload" as="image" href={`${M}/intro/signature.webp`} />
 
   <main>
     <!-- HERO -->

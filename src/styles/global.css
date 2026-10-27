@@ -404,7 +404,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 /* signature intro */
 .sig { position: fixed; inset: 0; z-index: 95; background: var(--bg); display: grid; place-items: center; }
-.sig video { width: min(78vw, 1200px); height: auto; mix-blend-mode: lighten; }
+.sig img { width: min(78vw, 1200px); height: auto; mix-blend-mode: lighten; }
 .sig.is-done { pointer-events: none; }
 html.is-signing, html.is-signing body { overflow: hidden; }
 
@@ -617,3 +617,6 @@ html.is-signing, html.is-signing body { overflow: hidden; }
 .scatter--design .s:nth-child(7) { left: 22%; top: 66%; width: 26%; aspect-ratio: 16 / 9; transform: rotate(2deg); }
 .scatter--design .s:nth-child(8) { left: 54%; top: 70%; width: 28%; aspect-ratio: 16 / 9; transform: rotate(-3deg); }
 @media (prefers-reduced-motion: reduce) { .do__bg i { animation: none; } }
+@media (max-width: 767px) {
+  .hero__tag { left: auto; right: 4vw; top: 31vh; bottom: auto; font-size: 13px; }
+}
