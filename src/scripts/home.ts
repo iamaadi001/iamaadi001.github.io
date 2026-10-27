@@ -324,6 +324,8 @@ if (reduce) {
     gsap.delayedCall(0.55, heroIn);
   };
   video.addEventListener('ended', endIntro);
+  video.muted = true;
+  video.playsInline = true;
   video.play().catch(() => setTimeout(endIntro, 400));
   setTimeout(endIntro, 6000);
 

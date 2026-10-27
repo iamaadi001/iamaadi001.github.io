@@ -40,14 +40,32 @@ if (lenis) lenis.on('scroll', ({ scroll }: { scroll: number }) => onScroll(scrol
 else addEventListener('scroll', () => onScroll(scrollY), { passive: true });
 
 /* ---------- videos play only while visible ---------- */
+// Phones only autoplay a video that is muted, inline and allowed to autoplay,
+// so set all of that in code; if a phone still blocks it (iOS Low Power Mode),
+// the first touch or scroll starts every visible video.
+const visible = new Set<HTMLVideoElement>();
+const prep = (v: HTMLVideoElement) => {
+  v.muted = true;
+  v.defaultMuted = true;
+  v.playsInline = true;
+  v.autoplay = true;
+  v.setAttribute('muted', '');
+  v.setAttribute('playsinline', '');
+  v.setAttribute('webkit-playsinline', '');
+};
+const tryPlay = (v: HTMLVideoElement) => {
+  prep(v);
+  if (!v.getAttribute('src') && v.dataset.src) { v.src = v.dataset.src; v.load(); }
+  const p = v.play();
+  if (p) p.catch(() => {});
+};
 const io = new IntersectionObserver((entries) => entries.forEach((en) => {
   const v = en.target as HTMLVideoElement;
-  if (en.isIntersecting) {
-    if (!v.getAttribute('src') && v.dataset.src) v.src = v.dataset.src;
-    v.play().catch(() => {});
-  } else v.pause();
+  if (en.isIntersecting) { visible.add(v); tryPlay(v); } else { visible.delete(v); v.pause(); }
 }), { rootMargin: '300px 300px' });
-$$<HTMLVideoElement>('video[data-src]').forEach((v) => io.observe(v));
+$$<HTMLVideoElement>('video[data-src]').forEach((v) => { prep(v); io.observe(v); });
+const unlock = () => visible.forEach((v) => { if (v.paused) tryPlay(v); });
+['touchstart', 'pointerdown', 'scroll'].forEach((ev) => addEventListener(ev, unlock, { passive: true }));
 
 /* ---------- lightbox ---------- */
 const lb = $('.lightbox');

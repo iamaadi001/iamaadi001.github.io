@@ -137,13 +137,12 @@ const [goCar, leanLog, salesWeek] = projects;
     <!-- WHAT I DO: horizontal -->
     <section class="do" aria-label="What I do">
       <div class="do__track">
-        <div class="panel panel--intro paper">
-          <span class="panel__word" aria-hidden="true">What I do</span>
+        <div class="do__bg" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="panel panel--intro">
           <h2 class="mega">What<br />I <span class="red">do</span> →</h2>
         </div>
 
-        <div class="panel panel--glow">
-          <span class="panel__word" aria-hidden="true">Content</span>
+        <div class="panel">
           <div class="scatter scatter--content">
             <img class="s phone" data-depth="0.5" src={`${M}/work/gocar-tiktok.webp`} alt="The Go Car TikTok feed I ran" loading="lazy" />
             {[['d1-kinetic', 1.2], ['d3-gym-split', 0.8], ['d7-chest-day', 1.5], ['d5-deficit-math', 0.6], ['d6-wake-up', 1.1], ['d2-habit-stack', 0.9]].map(([id, d]) => (
@@ -158,8 +157,7 @@ const [goCar, leanLog, salesWeek] = projects;
           <div class="panel__title"><h3 class="mega">Marketing<br />&amp; content</h3></div>
         </div>
 
-        <div class="panel panel--green panel--glow">
-          <span class="panel__word" aria-hidden="true">Sales</span>
+        <div class="panel">
           <div class="scatter scatter--photos">
             {[1, 2, 3, 4, 5, 6].map((n, i) => (
               <img class="s" data-depth={[0.6, 1.3, 0.9, 1.6, 0.7, 1.1][i]} src={`${M}/work/gocar/photo-${n}.webp`} alt="Go Car customers and tours in Barcelona" loading="lazy" />
@@ -175,8 +173,7 @@ const [goCar, leanLog, salesWeek] = projects;
           <div class="panel__title"><h3 class="mega">Sales &amp;<br />clients</h3></div>
         </div>
 
-        <div class="panel paper panel--glow">
-          <span class="panel__word" aria-hidden="true">Automate</span>
+        <div class="panel">
           <div class="flow" aria-label="Invoice workflow I automated with the Go Car CEO">
             {flow.map((f, i) => (
               <>
@@ -205,15 +202,16 @@ const [goCar, leanLog, salesWeek] = projects;
           <div class="panel__title"><h3 class="mega">AI &amp;<br />automation</h3></div>
         </div>
 
-        <div class="panel panel--glow">
-          <span class="panel__word" aria-hidden="true">Craft</span>
+        <div class="panel">
           <div class="scatter scatter--design">
             <video class="s" data-depth="0.7" muted loop playsinline preload="none" data-src={`${M}/3d/clips/bottle-a.mp4`} poster={`${M}/3d/clips/bottle-a.jpg`}></video>
-            <img class="s" data-depth="1.3" src={`${M}/3d/car-wheel.webp`} alt="3D render of a sports car wheel" loading="lazy" />
-            <img class="s" data-depth="0.9" src={`${M}/3d/bottles.webp`} alt="3D render of a perfume bottle line" loading="lazy" />
+            <img class="s" data-depth="1.3" src={`${M}/3d/ace-lineup.webp`} alt="3D render: the ACE perfume line" loading="lazy" />
+            <img class="s" data-depth="0.9" src={`${M}/3d/car-studio.webp`} alt="3D render: sports car in a studio" loading="lazy" />
             <video class="s" data-depth="1.5" muted loop playsinline preload="none" data-src={`${M}/3d/clips/glasses-a.mp4`} poster={`${M}/3d/clips/glasses-a.jpg`}></video>
-            <img class="s" data-depth="0.6" src={`${M}/3d/bottle-dark.webp`} alt="3D render of a bottle on black" loading="lazy" />
+            <img class="s" data-depth="0.6" src={`${M}/3d/ace-open.webp`} alt="3D render: ACE bottle opening" loading="lazy" />
             <video class="s" data-depth="1.1" muted loop playsinline preload="none" data-src={`${M}/3d/clips/car-reveal.mp4`} poster={`${M}/3d/clips/car-reveal.jpg`}></video>
+            <img class="s" data-depth="1.2" src={`${M}/3d/ace-single.webp`} alt="3D render: ACE bottle" loading="lazy" />
+            <img class="s" data-depth="0.8" src={`${M}/3d/car-dark.webp`} alt="3D render: sports car in the dark" loading="lazy" />
           </div>
           <div class="panel__title"><h3 class="mega">Design,<br />3D &amp; video</h3></div>
         </div>
@@ -306,7 +304,7 @@ const [goCar, leanLog, salesWeek] = projects;
       </div>
       <div class="float" data-speed="-0.35" style="width:20vw;aspect-ratio:4/5;left:6vw;top:20vh;transform:rotate(-4deg)"><img src={`${M}/work/gocar/photo-2.webp`} alt="Go Car tour in Barcelona" loading="lazy" /></div>
       <div class="float" data-speed="-0.5" style="width:20vw;aspect-ratio:16/10;right:4vw;top:82vh;transform:rotate(3deg)"><img src={`${M}/work/gocar/photo-1.webp`} alt="Go Car cars on a Barcelona street" loading="lazy" /></div>
-      <div class="chapter__name chapter__name--low" style="--len:6"><h3 class="mega">Go Car<span class="dot" style="left:62%;top:-4%"></span></h3></div>
+      <div class="chapter__name chapter__name--low" style="--len:6"><h3 class="mega">Go Car</h3></div>
       <div class="sticker" style="left:30vw;top:26vh">118,000+<small>organic views</small></div>
       <div class="sticker sticker--green" style="left:56vw;top:58vh">20+<small>bookings closed</small></div>
       <a class="link-arrow chapter__cta" href={`/work/${goCar.slug}/`}>Explore project ↗</a>
@@ -319,7 +317,7 @@ const [goCar, leanLog, salesWeek] = projects;
       <div class="float float--back" data-speed="0.2" style="width:28vw;aspect-ratio:16/9;right:6vw;top:18vh;transform:rotate(2deg)"><img src={`${M}/work/leanlog/day6-4-50-am.webp`} alt="Lean Log thumbnail: I wake up at 4.50 AM" loading="lazy" /></div>
       <div class="float float--back" data-speed="-0.45" style="width:26vw;aspect-ratio:16/9;left:9vw;top:76vh;transform:rotate(2deg)"><img src={`${M}/work/leanlog/day5-healthy.webp`} alt="Lean Log thumbnail: it does not have to be healthy" loading="lazy" /></div>
       <div class="float float--back" data-speed="-0.25" style="width:25vw;aspect-ratio:16/9;right:12vw;top:72vh;transform:rotate(-3deg)"><img src={`${M}/work/leanlog/day4-leg-day.webp`} alt="Lean Log thumbnail: leg day" loading="lazy" /></div>
-      <div class="chapter__name" style="--len:8"><h3 class="mega">Lean Log<span class="dot" style="left:44%;top:-4%"></span></h3></div>
+      <div class="chapter__name" style="--len:8"><h3 class="mega">Lean Log</h3></div>
       <div class="sticker" style="left:40vw;top:20vh">16,000+<small>views in four weeks</small></div>
       <a class="link-arrow chapter__cta" href={`/work/${leanLog.slug}/`}>Explore project ↗</a>
     </article>
@@ -330,7 +328,7 @@ const [goCar, leanLog, salesWeek] = projects;
       <div class="float" data-speed="-0.35" style="width:30vw;aspect-ratio:4/5;right:7vw;top:16vh;transform:rotate(3deg)"><img src={`${M}/photos/finland-salesweek.webp`} alt="The team at International Sales Week" loading="lazy" /></div>
       <div class="float float--back" data-speed="-0.2" style="width:32vw;aspect-ratio:16/9;left:6vw;top:6vh;transform:rotate(-2deg)"><img src={`${M}/photos/finland-team.webp`} alt="With the team in Helsinki" loading="lazy" /></div>
       <div class="float" data-speed="-0.6" style="width:18vw;aspect-ratio:4/3;left:30vw;top:80vh;transform:rotate(-4deg)"><img src={`${M}/photos/finland-cathedral.webp`} alt="Helsinki" loading="lazy" /></div>
-      <div class="chapter__name" style="--len:10"><h3 class="mega">Sales week<span class="dot" style="left:30%;top:-4%"></span></h3></div>
+      <div class="chapter__name" style="--len:10"><h3 class="mega">Sales week</h3></div>
       <div class="sticker sticker--ivory" style="left:44vw;top:28vh">2nd place<small>in the final</small></div>
       <a class="link-arrow chapter__cta" href={`/work/${salesWeek.slug}/`}>Explore project ↗</a>
     </article>
@@ -391,7 +389,7 @@ const [goCar, leanLog, salesWeek] = projects;
             <a href="https://www.linkedin.com/in/aaditya-gambhir/" target="_blank" rel="noopener">LinkedIn</a>
             <a href="https://www.instagram.com/aadityagambhir_/" target="_blank" rel="noopener">Instagram</a>
             <a href="https://www.youtube.com/@aadityagambhir_01" target="_blank" rel="noopener">YouTube</a>
-            <a href="/cv/">CV</a>
+            <a href="/Aaditya-Gambhir-CV.pdf" target="_blank" rel="noopener">CV</a>
           </nav>
         </div>
         <div class="footer__mark">Aaditya <span>G.</span></div>
