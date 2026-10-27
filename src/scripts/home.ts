@@ -173,8 +173,16 @@ function build(desk: boolean) {
     scrollTrigger: { trigger: '.do', start: 'top top', end: () => `+=${track.scrollWidth - vw()}`, pin: true, scrub: 1, invalidateOnRefresh: true },
   });
   $$('.panel').forEach((p) => {
-    const media = $('.mzone', p);
-    if (media) gsap.fromTo(media, { scale: 1.2, opacity: 0.3 }, { scale: 1, opacity: 1, ease: 'none', scrollTrigger: { trigger: p, containerAnimation: pan, start: 'left right', end: 'left 20%', scrub: true } });
+    // depth: the outlined word drifts slowly, the media pieces move at their own speed
+    const word = $('.panel__word', p);
+    const span = { trigger: p, containerAnimation: pan, start: 'left right', end: 'right left', scrub: true };
+    if (word) gsap.fromTo(word, { xPercent: 12 }, { xPercent: -38, ease: 'none', scrollTrigger: span });
+    $$<HTMLElement>('.scatter .s', p).forEach((m) => {
+      const d = Number(m.dataset.depth || 1);
+      gsap.fromTo(m, { x: d * 160 }, { x: -d * 160, ease: 'none', scrollTrigger: span });
+    });
+    const scatter = $('.scatter', p);
+    if (scatter) gsap.fromTo(scatter, { scale: 1.15, opacity: 0.2 }, { scale: 1, opacity: 1, ease: 'none', scrollTrigger: { trigger: p, containerAnimation: pan, start: 'left right', end: 'left 25%', scrub: true } });
     const title = $('.panel__title', p), stat = $('.panel__stat', p);
     if (title) gsap.from(title, { xPercent: 40, opacity: 0, ease: 'none', scrollTrigger: { trigger: p, containerAnimation: pan, start: 'left 80%', end: 'left 20%', scrub: true } });
     if (stat) gsap.from(stat, { y: 140, opacity: 0, scale: 0.8, ease: 'none', scrollTrigger: { trigger: p, containerAnimation: pan, start: 'left 70%', end: 'left 25%', scrub: true } });

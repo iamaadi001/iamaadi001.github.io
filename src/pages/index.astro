@@ -15,7 +15,7 @@ const light = (hex: string) => {
 const T = {
   hero: [[5, 0], ['.l1', 0.1, -0.35], ['.l1', 0.48, 0.55], ['.l1', 0.96, 1.02], ['.l2', 0.58, 0.55], ['.l2', 0.22, 1.5], [20, 100]],
   tapes: [[20, 0], [24, 50], [20, 100]],
-  about: [[20, 0], ['.about__lines .line:nth-child(1)', 0.3, 0.5], ['.about__lines .q', 0.45, 0.55], ['.about__lines .line:nth-child(4)', 0.3, 0.5], ['.about__say', 0.92, 0.1], ['.group--1 .polaroid', 0.5, -0.04], ['.group--2 .polaroid', 0.5, -0.04], ['.group--3 .polaroid', 0.4, -0.04], [30, 100]],
+  about: [[20, 0], ['.about__lines .line:nth-child(1)', 0.3, 0.5], ['.about__lines .q', 0.45, 0.55], ['.about__lines .line:nth-child(4)', 0.3, 0.5], ['.about__say', 0.92, 0.1], ['.group--1 .polaroid', 0.5, -0.04], ['.group--2 .polaroid', 0.5, -0.04], ['.group--3 .polaroid', 0.6, -0.04], [30, 100]],
   work: [[30, 0], ['.work-intro .mega', 0.55, 0.28], ['.work-intro .mega', 0.18, 0.86], [30, 100]],
   ch: [[30, 0], ['.chapter__top', 0.03, 1.8], ['.chapter__name .mega', 0.5, 0.45], ['.chapter__cta', -0.04, 0.5], [30, 100]],
 };
@@ -138,14 +138,18 @@ const [goCar, leanLog, salesWeek] = projects;
     <section class="do" aria-label="What I do">
       <div class="do__track">
         <div class="panel panel--intro paper">
+          <span class="panel__word" aria-hidden="true">What I do</span>
           <h2 class="mega">What<br />I <span class="red">do</span> →</h2>
         </div>
 
-        <div class="panel">
-          <div class="mzone mzone--content">
-            <img class="phone" src={`${M}/work/gocar-tiktok.webp`} alt="The Go Car TikTok feed I ran" loading="lazy" />
-            <video muted loop playsinline preload="none" data-src={reelSrc('d1-kinetic')} poster={`${M}/reels/d1-kinetic.jpg`}></video>
-            <video muted loop playsinline preload="none" data-src={reelSrc('d7-lost-10kg')} poster={`${M}/reels/d7-lost-10kg.jpg`}></video>
+        <div class="panel panel--glow">
+          <span class="panel__word" aria-hidden="true">Content</span>
+          <div class="scatter scatter--content">
+            <img class="s phone" data-depth="0.5" src={`${M}/work/gocar-tiktok.webp`} alt="The Go Car TikTok feed I ran" loading="lazy" />
+            {[['d1-kinetic', 1.2], ['d3-gym-split', 0.8], ['d7-chest-day', 1.5], ['d5-deficit-math', 0.6], ['d6-wake-up', 1.1], ['d2-habit-stack', 0.9]].map(([id, d]) => (
+              <video class="s reel" data-depth={d} muted loop playsinline preload="none" data-src={reelSrc(id as string)} poster={`${M}/reels/${id}.jpg`}></video>
+            ))}
+            <img class="s grid" data-depth="0.7" src={`${M}/work/gocar-instagram.webp`} alt="The Go Car Instagram feed I ran" loading="lazy" />
           </div>
           <div class="panel__stat">
             <b>134K+</b>
@@ -154,11 +158,13 @@ const [goCar, leanLog, salesWeek] = projects;
           <div class="panel__title"><h3 class="mega">Marketing<br />&amp; content</h3></div>
         </div>
 
-        <div class="panel panel--green">
-          <div class="mzone mzone--photos">
-            <img src={`${M}/work/gocar/photo-5.webp`} alt="Customers in a Go Car" loading="lazy" />
-            <img src={`${M}/work/gocar/photo-6.webp`} alt="Go Car customers in Barcelona" loading="lazy" />
-            <img src={`${M}/work/gocar/photo-4.webp`} alt="Go Car tour" loading="lazy" />
+        <div class="panel panel--green panel--glow">
+          <span class="panel__word" aria-hidden="true">Sales</span>
+          <div class="scatter scatter--photos">
+            {[1, 2, 3, 4, 5, 6].map((n, i) => (
+              <img class="s" data-depth={[0.6, 1.3, 0.9, 1.6, 0.7, 1.1][i]} src={`${M}/work/gocar/photo-${n}.webp`} alt="Go Car customers and tours in Barcelona" loading="lazy" />
+            ))}
+            <img class="s" data-depth="1.4" src={`${M}/work/gocar/promo-poster.jpg`} alt="Still from the Go Car promo I made" loading="lazy" />
           </div>
           <div class="panel__stat">
             <b>20+</b>
@@ -169,7 +175,8 @@ const [goCar, leanLog, salesWeek] = projects;
           <div class="panel__title"><h3 class="mega">Sales &amp;<br />clients</h3></div>
         </div>
 
-        <div class="panel paper">
+        <div class="panel paper panel--glow">
+          <span class="panel__word" aria-hidden="true">Automate</span>
           <div class="flow" aria-label="Invoice workflow I automated with the Go Car CEO">
             {flow.map((f, i) => (
               <>
@@ -198,16 +205,15 @@ const [goCar, leanLog, salesWeek] = projects;
           <div class="panel__title"><h3 class="mega">AI &amp;<br />automation</h3></div>
         </div>
 
-        <div class="panel">
-          <div class="mzone mzone--design">
-            <img src={`${M}/work/leanlog/day7-minus-10kg.webp`} alt="Thumbnail I designed: minus 10 kg" loading="lazy" />
-            <img src={`${M}/art/old-man.webp`} alt="Pencil drawing of an old man" loading="lazy" />
-            <img src={`${M}/work/leanlog/day6-4-50-am.webp`} alt="Thumbnail I designed: 4.50 AM" loading="lazy" />
-            <img src={`${M}/art/eye.webp`} alt="Colour drawing of an eye" loading="lazy" />
-          </div>
-          <div class="panel__stat">
-            <b>13</b>
-            <span class="mono">Drawings, plus product animation in Blender, thumbnails and edits</span>
+        <div class="panel panel--glow">
+          <span class="panel__word" aria-hidden="true">Craft</span>
+          <div class="scatter scatter--design">
+            <video class="s" data-depth="0.7" muted loop playsinline preload="none" data-src={`${M}/3d/clips/bottle-a.mp4`} poster={`${M}/3d/clips/bottle-a.jpg`}></video>
+            <img class="s" data-depth="1.3" src={`${M}/3d/car-wheel.webp`} alt="3D render of a sports car wheel" loading="lazy" />
+            <img class="s" data-depth="0.9" src={`${M}/3d/bottles.webp`} alt="3D render of a perfume bottle line" loading="lazy" />
+            <video class="s" data-depth="1.5" muted loop playsinline preload="none" data-src={`${M}/3d/clips/glasses-a.mp4`} poster={`${M}/3d/clips/glasses-a.jpg`}></video>
+            <img class="s" data-depth="0.6" src={`${M}/3d/bottle-dark.webp`} alt="3D render of a bottle on black" loading="lazy" />
+            <video class="s" data-depth="1.1" muted loop playsinline preload="none" data-src={`${M}/3d/clips/car-reveal.mp4`} poster={`${M}/3d/clips/car-reveal.jpg`}></video>
           </div>
           <div class="panel__title"><h3 class="mega">Design,<br />3D &amp; video</h3></div>
         </div>
@@ -322,7 +328,7 @@ const [goCar, leanLog, salesWeek] = projects;
       <svg class="thread" data-points={pts(T.ch)} aria-hidden="true"></svg>
       <div class="chapter__top"><span class="mono">{salesWeek.n} / {salesWeek.short}</span><p>{salesWeek.line}</p></div>
       <div class="float" data-speed="-0.35" style="width:30vw;aspect-ratio:4/5;right:7vw;top:16vh;transform:rotate(3deg)"><img src={`${M}/photos/finland-salesweek.webp`} alt="The team at International Sales Week" loading="lazy" /></div>
-      <div class="float float--back" data-speed="0.25" style="width:32vw;aspect-ratio:16/9;left:6vw;top:22vh;transform:rotate(-2deg)"><img src={`${M}/photos/finland-team.webp`} alt="With the team in Helsinki" loading="lazy" /></div>
+      <div class="float float--back" data-speed="-0.2" style="width:32vw;aspect-ratio:16/9;left:6vw;top:6vh;transform:rotate(-2deg)"><img src={`${M}/photos/finland-team.webp`} alt="With the team in Helsinki" loading="lazy" /></div>
       <div class="float" data-speed="-0.6" style="width:18vw;aspect-ratio:4/3;left:30vw;top:80vh;transform:rotate(-4deg)"><img src={`${M}/photos/finland-cathedral.webp`} alt="Helsinki" loading="lazy" /></div>
       <div class="chapter__name" style="--len:10"><h3 class="mega">Sales week<span class="dot" style="left:30%;top:-4%"></span></h3></div>
       <div class="sticker sticker--ivory" style="left:44vw;top:28vh">2nd place<small>in the final</small></div>
